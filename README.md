@@ -1,42 +1,68 @@
-# Chat Application
+# Тренажер устного счета
 
-This is a simple chat application built with Flutter that allows users to send messages to a backend server.
+Приложение для тренировки навыков устного счета, разработанное на Flutter.
 
-## Features
+## Быстрый старт
 
-- User can enter messages in a text field.
-- Messages are sent to the backend server.
-- Displays sent messages in a chat interface.
+1. **Автоматическая установка**:
+   ```bash
+   # Сделать скрипт исполняемым
+   chmod +x setup.sh
+   
+   # Запустить установку
+   ./setup.sh
+   ```
 
-## Technologies Used
+2. **Ручная установка**:
+   ```bash
+   # Клонировать репозиторий
+   git clone https://github.com/your-username/mind_count.git
+   cd mind_count
+   
+   # Установить зависимости
+   flutter pub get
+   
+   # Запустить приложение
+   flutter run
+   ```
+
+## Возможности
+
+- Генерация примеров на сложение с адаптивной сложностью
+- Система уровней (увеличение сложности каждые 5 правильных ответов)
+- История решенных примеров
+- Мгновенная проверка ответов
+- Удобный интерфейс для быстрого ввода ответов
+
+## Как это работает
+
+1. На экране появляется пример для решения (например, "8 + 5 = ?")
+2. Введите ваш ответ в поле ввода
+3. Нажмите "Проверить" или клавишу Enter
+4. Получите мгновенный результат:
+   - При правильном ответе: переход к следующему примеру
+   - При неправильном ответе: возможность попробовать еще раз
+
+## Система уровней
+
+- Уровень 1: числа от 1 до 5
+- Уровень 2: числа от 1 до 10
+- Уровень 3: числа от 1 до 15
+- И так далее...
+
+Каждые 5 правильных ответов уровень повышается, и диапазон чисел увеличивается.
+
+## Технологии
 
 - Flutter
 - Dart
-- HTTP package for making network requests
 
-## Setup
+## Требования
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://your-repo-url.git
-   cd chat_volch_app
+- Flutter SDK
+- Dart SDK
+- Android Studio / VS Code с плагином Flutter
 
-2. **Install dependencies**:
-   ```bash
-   flutter pub get
+## Лицензия
 
-3. **Run the app**:
-   ```bash
-   flutter run      
-
-4. **Build the app for distribution**:
-   ```bash
-   flutter build apk    
-
-5. **Deploy to Firebase**:
-   ```bash
-   firebase deploy              
-
-
-
-   
+MIT License

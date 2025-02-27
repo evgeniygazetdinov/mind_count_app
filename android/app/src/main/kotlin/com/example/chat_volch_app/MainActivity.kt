@@ -1,4 +1,4 @@
-package com.example.chat_volch_app
+package com.example.mind_count
 
 import io.flutter.embedding.android.FlutterActivity
 
