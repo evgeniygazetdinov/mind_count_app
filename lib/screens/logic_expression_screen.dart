@@ -235,106 +235,104 @@ class LoopOperationsScreen extends StatefulWidget {
 
 class _LoopOperationsScreenState extends State<LoopOperationsScreen> {
   final Random _random = Random();
-  int currentStep = 0;
-  int totalSteps = 3;  // Количество итераций цикла
-  int variableA = 0;
-  int variableB = 0;
-  List<String> iterationHistory = [];
+  List<int> numbers = [];
+  int currentIndex = 1;  // Начинаем с 1, так как сравниваем с предыдущим
   String currentExpression = '';
   bool correctAnswer = false;
   int score = 0;
+  int direction = 0;  // 0 - не определено, 1 - возрастание, -1 - убывание
+  bool isMonotonic = true;
 
   @override
   void initState() {
     super.initState();
-    _startNewLoop();
+    _generateNewSequence();
   }
 
-  void _startNewLoop() {
-    currentStep = 0;
-    iterationHistory = [];
-    _generateNextIteration();
+  void _generateNewSequence() {
+    // Генерируем новую последовательность из 5 чисел
+    numbers = List.generate(5, (index) => _random.nextInt(20));
+    currentIndex = 1;
+    direction = 0;
+    isMonotonic = true;
+    _generateNextStep();
   }
 
-  void _generateNextIteration() {
-    if (currentStep >= totalSteps) {
-      _startNewLoop();
+  void _generateNextStep() {
+    if (currentIndex >= numbers.length) {
+      _generateNewSequence();
       return;
     }
 
-    // Генерируем новые значения для переменных
-    int prevA = variableA;
-    int prevB = variableB;
-    
-    // Генерируем новые значения (от 1 до 20)
-    variableA = _random.nextInt(20) + 1;
-    variableB = _random.nextInt(20) + 1;
-
-    // Добавляем в историю предыдущие значения и операцию
-    if (currentStep > 0) {
-      iterationHistory.add(
-        'Шаг $currentStep: a = $prevA + $variableA = ${prevA + variableA}, '
-        'b = $prevB + $variableB = ${prevB + variableB}'
-      );
-    }
-
-    // Случайно выбираем тип сравнения
-    bool compareFirst = _random.nextBool();
-    String operation = _random.nextBool() ? '>' : '<';
-    
     setState(() {
+      // Показываем текущий шаг и просим угадать следующее число
+      String sequence = numbers.sublist(0, currentIndex).join(', ');
+      
       currentExpression = '''
-Итерация ${currentStep + 1} из $totalSteps:
+Последовательность: [$sequence, ?]
 
-${iterationHistory.join('\n')}
+Текущий индекс: $currentIndex
+Предыдущее число: ${numbers[currentIndex - 1]}
 
-Текущие значения:
-a = ${currentStep > 0 ? '${prevA + variableA}' : variableA}
-b = ${currentStep > 0 ? '${prevB + variableB}' : variableB}
-
-На следующем шаге:
-a += $variableA
-b += $variableB
-
-Верно ли что: ${compareFirst ? 'a' : 'b'} $operation ${compareFirst ? 'b' : 'a'}?
+Верно ли что следующее число БОЛЬШЕ предыдущего?
+(т.е. nums[$currentIndex] > nums[${currentIndex - 1}])
 ''';
 
-      // Вычисляем правильный ответ
-      int finalA = currentStep > 0 ? prevA + variableA : variableA;
-      int finalB = currentStep > 0 ? prevB + variableB : variableB;
-      
-      correctAnswer = compareFirst
-          ? (operation == '>' ? finalA > finalB : finalA < finalB)
-          : (operation == '>' ? finalB > finalA : finalB < finalA);
+      // Определяем правильный ответ
+      correctAnswer = numbers[currentIndex] > numbers[currentIndex - 1];
+
+      // Обновляем direction для проверки монотонности
+      if (numbers[currentIndex] > numbers[currentIndex - 1]) {
+        if (direction == 0) direction = 1;
+        else if (direction == -1) isMonotonic = false;
+      } else if (numbers[currentIndex] < numbers[currentIndex - 1]) {
+        if (direction == 0) direction = -1;
+        else if (direction == 1) isMonotonic = false;
+      }
     });
   }
 
   void _handleAnswer(bool userAnswer) {
     bool isCorrect = userAnswer == correctAnswer;
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(isCorrect ? 'Правильно!' : 'Неправильно!'),
-        backgroundColor: isCorrect ? Colors.green : Colors.red,
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    setState(() {
+      // Показываем результат текущего шага
+      String sequence = numbers.sublist(0, currentIndex + 1).join(', ');
+      String message = '''
+Последовательность: [$sequence]
 
-    if (isCorrect) {
-      setState(() {
-        score++;
-      });
-    }
+${isCorrect ? 'Правильно!' : 'Неправильно!'}
+nums[$currentIndex] = ${numbers[currentIndex]}
 
-    currentStep++;
-    _generateNextIteration();
+${currentIndex == numbers.length - 1 ? '''
+Последовательность ${isMonotonic ? 'ЯВЛЯЕТСЯ' : 'НЕ ЯВЛЯЕТСЯ'} монотонной.
+Направление: ${direction == 1 ? 'возрастающая' : direction == -1 ? 'убывающая' : 'не определено'}
+''' : ''}
+''';
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: isCorrect ? Colors.green : Colors.red,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      if (isCorrect) score++;
+    });
+
+    // Переходим к следующему шагу
+    currentIndex++;
+    Future.delayed(const Duration(seconds: 2), () {
+      _generateNextStep();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Циклические операции'),
+        title: const Text('Монотонные последовательности'),
         leading: BackButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(
@@ -378,14 +376,14 @@ b += $variableB
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   ),
-                  child: const Text('ИСТИНА'),
+                  child: const Text('БОЛЬШЕ'),
                 ),
                 ElevatedButton(
                   onPressed: () => _handleAnswer(false),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   ),
-                  child: const Text('ЛОЖЬ'),
+                  child: const Text('НЕ БОЛЬШЕ'),
                 ),
               ],
             ),
