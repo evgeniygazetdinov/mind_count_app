@@ -24,6 +24,11 @@
    
    # Запустить приложение
    flutter run
+
+   # собрать апк 
+   flutter build apk
+   путь апк build/app/outputs/flutter-apk/app-release.apk
+
    ```
 
 ## Возможности
