@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'math_trainer_screen.dart';
 import 'logic_expression_screen.dart';
 import 'game_modes.dart';
+import 'sql_joins_trainer.dart';
+import 'sql_query_builder.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -77,6 +80,38 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text('Логические выражения'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SqlJoinsTrainerScreen(),
+                  ),
+                );
+              },
+              child: const Text('SQL JOIN Тренажер'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SqlQueryBuilderScreen(),
+                  ),
+                );
+              },
+              child: const Text('SQL Query Builder'),
             ),
           ],
         ),

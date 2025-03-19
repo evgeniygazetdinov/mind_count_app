@@ -21,9 +21,6 @@
    
    # Установить зависимости
    flutter pub get
-   
-   # Запустить приложение
-   flutter run
 
    # собрать апк 
    flutter build apk
