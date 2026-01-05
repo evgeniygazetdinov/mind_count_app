@@ -167,8 +167,9 @@ class _SqlJoinsTrainerScreenState extends State<SqlJoinsTrainerScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: generateNewExercise,
-        child: const Icon(Icons.shuffle),
         tooltip: 'Следующее упражнение',
+        child: const Icon(Icons.shuffle),
+
       ),
     );
   }

@@ -115,13 +115,13 @@ class _SqlQueryBuilderScreenState extends State<SqlQueryBuilderScreen> {
                     },
                   );
                 },
-                onWillAccept: (data) => data != null,
-                onAccept: (data) {
+                // onWillAcceptWithDetails: (details) => details.data != null,
+                onAcceptWithDetails: (details) {
                   setState(() {
                     final index = userSolution.indexOf(token);
                     if (index != -1) {
-                      userSolution[index] = data;
-                      availableTokens.remove(data);
+                      userSolution[index] = details.data;
+                      availableTokens.remove(details.data);
                       if (!availableTokens.contains(token)) {
                         availableTokens.add(token);
                       }
@@ -145,7 +145,6 @@ class _SqlQueryBuilderScreenState extends State<SqlQueryBuilderScreen> {
                 runSpacing: 8.0,
                 children: availableTokens.map((token) => Draggable<String>(
                   data: token,
-                  child: Chip(label: Text(token)),
                   feedback: Material(
                     child: Chip(label: Text(token)),
                   ),
@@ -153,6 +152,8 @@ class _SqlQueryBuilderScreenState extends State<SqlQueryBuilderScreen> {
                     opacity: 0.5,
                     child: Chip(label: Text(token)),
                   ),
+                  child: Chip(label: Text(token)),
+
                 )).toList(),
               ),
             ),

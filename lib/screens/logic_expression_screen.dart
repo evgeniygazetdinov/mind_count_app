@@ -59,13 +59,14 @@ class _LogicExpressionsScreenState extends State<LogicExpressionsScreen> {
 
     // Если выбран режим, показываем соответствующий контент
     return selectedMode == LogicMode.boolean
-        ? BooleanOperationsScreen()
-        : LoopOperationsScreen();
+        ? const BooleanOperationsScreen()
+        : const LoopOperationsScreen();
   }
 }
 
 // Экран для булевых операций
 class BooleanOperationsScreen extends StatefulWidget {
+  const BooleanOperationsScreen({super.key});
   @override
   State<BooleanOperationsScreen> createState() => _BooleanOperationsScreenState();
 }
@@ -105,8 +106,8 @@ class _BooleanOperationsScreenState extends State<BooleanOperationsScreen> {
     }
 
     setState(() {
-      String varA = 'a${currentStep}';
-      String varB = 'a${currentStep + 1}';
+      String varA = 'a$currentStep';
+      String varB = 'a$currentStep + 1';
       String operation = operations[currentStep];
       
       currentExpression = '''
@@ -229,6 +230,7 @@ $varB = ${variables[currentStep + 1]}
 
 // Экран для циклических операций
 class LoopOperationsScreen extends StatefulWidget {
+  const LoopOperationsScreen({super.key});
   @override
   State<LoopOperationsScreen> createState() => _LoopOperationsScreenState();
 }
@@ -283,11 +285,20 @@ class _LoopOperationsScreenState extends State<LoopOperationsScreen> {
 
       // Обновляем direction для проверки монотонности
       if (numbers[currentIndex] > numbers[currentIndex - 1]) {
-        if (direction == 0) direction = 1;
-        else if (direction == -1) isMonotonic = false;
+        if (direction == 0) 
+        {
+          direction = 1;
+        }
+        else if (direction == -1)
+        { 
+          isMonotonic = false;
+        }
       } else if (numbers[currentIndex] < numbers[currentIndex - 1]) {
-        if (direction == 0) direction = -1;
-        else if (direction == 1) isMonotonic = false;
+        if (direction == 0) 
+        {direction = -1;}
+        else if (direction == 1){
+           isMonotonic = false;
+        }
       }
     });
   }
